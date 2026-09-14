@@ -3,9 +3,9 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.app',
+  title: 'PackSure AI — Scan. Verify. Comply.',
+  description: 'AI-assisted preliminary packaging compliance screening platform.',
+  generator: 'PackSure AI',
   icons: {
     icon: [
       {

@@ -1,103 +1,236 @@
 'use client'
 
-import { useState } from 'react'
+import Link from 'next/link'
 import {
-  Activity,
-  BarChart3,
-  Bell,
+  ArrowRight,
   BookOpen,
-  Box,
-  ChevronDown,
-  FileText,
-  HelpCircle,
-  History,
-  LayoutDashboard,
-  Menu,
-  MoreHorizontal,
-  Plus,
-  Search,
-  Settings,
+  CheckCircle2,
+  ChevronRight,
+  FileCheck2,
+  Layers,
+  ScanLine,
+  ShieldAlert,
   ShieldCheck,
   Sparkles,
-  Upload,
-  X,
 } from 'lucide-react'
 
-const scans = [
-  { name: 'Organic Oat Milk', type: 'Beverage carton', date: 'Today, 10:42 AM', score: 96, status: 'Passed', color: 'green', image: 'OM' },
-  { name: 'PureGlow Serum', type: 'Cosmetic bottle', date: 'Yesterday, 4:18 PM', score: 82, status: 'Needs review', color: 'amber', image: 'PG' },
-  { name: 'Terra Snacks', type: 'Flexible pouch', date: 'Sep 12, 2026', score: 64, status: 'Potential issue', color: 'red', image: 'TS' },
-]
-
-const navItems = [
-  { label: 'Dashboard', icon: LayoutDashboard, active: true },
-  { label: 'New Scan', icon: Plus, primary: true },
-  { label: 'Scan History', icon: History },
-  { label: 'Reports', icon: FileText },
-  { label: 'Analytics', icon: BarChart3 },
-  { label: 'Regulatory Library', icon: BookOpen },
-  { label: 'Ask PackSure', icon: Sparkles, ai: true },
-]
-
-export default function Page() {
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const [showNotifications, setShowNotifications] = useState(false)
-  const [toast, setToast] = useState('')
-
-  const startScan = () => {
-    setToast('New scan workspace ready')
-    window.setTimeout(() => setToast(''), 2600)
-  }
-
+export default function LandingPage() {
   return (
-    <div className="app-shell">
-      <aside className={`sidebar ${mobileOpen ? 'sidebar-open' : ''}`}>
-        <div className="brand-row">
-          <div className="brand-mark"><ShieldCheck size={19} strokeWidth={2.6} /></div>
-          <div><strong>PackSure</strong><span>AI COMPLIANCE</span></div>
-          <button className="icon-button mobile-close" onClick={() => setMobileOpen(false)} aria-label="Close menu"><X size={18} /></button>
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-blue-600 selection:text-white">
+      {/* Navigation */}
+      <header className="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
+              <ShieldCheck size={18} strokeWidth={2.5} />
+            </div>
+            <div>
+              <span className="font-black tracking-tight text-base text-white">PackSure</span>
+              <span className="text-[10px] text-blue-400 font-bold ml-1.5 px-1.5 py-0.5 rounded bg-blue-950 border border-blue-800">
+                AI COMPLIANCE
+              </span>
+            </div>
+          </div>
+
+          <nav className="hidden md:flex items-center gap-8 text-xs font-semibold text-slate-400">
+            <a href="#how-it-works" className="hover:text-white transition">
+              How It Works
+            </a>
+            <a href="#features" className="hover:text-white transition">
+              Features
+            </a>
+            <a href="#regulations" className="hover:text-white transition">
+              Legal Metrology Scope
+            </a>
+          </nav>
+
+          <div className="flex items-center gap-3">
+            <Link
+              href="/login"
+              className="text-xs font-semibold text-slate-300 hover:text-white px-3 py-1.5 transition"
+              style={{ textDecoration: 'none' }}
+            >
+              Sign In
+            </Link>
+            <Link
+              href="/dashboard"
+              className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-600/30 transition flex items-center gap-1.5"
+              style={{ textDecoration: 'none' }}
+            >
+              Launch Platform <ArrowRight size={14} />
+            </Link>
+          </div>
         </div>
-        <div className="workspace-select"><div className="workspace-avatar">AC</div><div><strong>Acme Consumer</strong><span>Compliance team</span></div><ChevronDown size={15} /></div>
-        <nav className="side-nav" aria-label="Main navigation">
-          <p className="nav-label">Workspace</p>
-          {navItems.map(({ label, icon: Icon, active, primary, ai }) => (
-            <button key={label} className={`nav-item ${active ? 'active' : ''} ${primary ? 'nav-primary' : ''} ${ai ? 'nav-ai' : ''}`} onClick={primary ? startScan : undefined}>
-              <Icon size={17} strokeWidth={active ? 2.3 : 1.9} /><span>{label}</span>{ai && <span className="new-pill">AI</span>}
-            </button>
-          ))}
-          <p className="nav-label settings-label">Account</p>
-          <button className="nav-item"><Settings size={17} /><span>Settings</span></button>
-        </nav>
-        <div className="sidebar-footer"><div className="help-card"><div className="help-icon"><HelpCircle size={16} /></div><div><strong>Need help?</strong><span>Visit our resource center</span></div><ChevronDown size={14} /></div><div className="user-row"><div className="user-avatar">JD</div><div><strong>Jordan Davis</strong><span>Administrator</span></div><MoreHorizontal size={17} /></div></div>
-      </aside>
+      </header>
 
-      <main className="main-content">
-        <header className="topbar"><button className="icon-button menu-trigger" onClick={() => setMobileOpen(true)} aria-label="Open menu"><Menu size={21} /></button><div className="breadcrumbs"><span>Workspace</span><span>/</span><strong>Dashboard</strong></div><div className="top-actions"><div className="search-box"><Search size={16} /><input aria-label="Search" placeholder="Search scans..." /></div><div className="notification-wrap"><button className="icon-button notification-button" onClick={() => setShowNotifications(!showNotifications)} aria-label="Notifications"><Bell size={18} /><i /></button>{showNotifications && <div className="notification-pop"><strong>Notifications</strong><p>Your PureGlow review is ready.</p></div>}</div><div className="top-user">JD<span>Jordan Davis</span><ChevronDown size={14} /></div></div></header>
+      {/* Hero Section */}
+      <section className="relative pt-20 pb-24 overflow-hidden border-b border-slate-900">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent pointer-events-none" />
 
-        <div className="page-body">
-          <section className="welcome-row"><div><p className="eyebrow">MONDAY, SEPTEMBER 14, 2026</p><h1>Good morning, Jordan <span>—</span></h1><p className="subheading">Here&apos;s what&apos;s happening with your packaging compliance.</p></div><button className="primary-button" onClick={startScan}><Plus size={18} /> Scan a product</button></section>
+        <div className="max-w-5xl mx-auto px-6 text-center flex flex-col items-center relative z-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-950/80 border border-blue-800/80 text-blue-400 text-xs font-semibold mb-6">
+            <Sparkles size={14} /> AI-Assisted Preliminary Packaging Compliance
+          </div>
 
-          <section className="kpi-grid" aria-label="Compliance overview">
-            <KpiCard label="Products scanned" value="248" delta="18.4%" note="vs. last month" icon={Box} tone="blue" />
-            <KpiCard label="Passed" value="186" delta="12.8%" note="vs. last month" icon={ShieldCheck} tone="green" />
-            <KpiCard label="Needs review" value="42" delta="6.2%" note="vs. last month" icon={Activity} tone="amber" />
-            <KpiCard label="Potential issues" value="20" delta="2.1%" note="vs. last month" icon={Bell} tone="red" negative />
-          </section>
+          <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight">
+            Scan. Verify. <span className="text-blue-500">Comply.</span>
+          </h1>
 
-          <section className="content-grid"><div className="card recent-card"><div className="card-header"><div><h2>Recent scans</h2><p>Your latest compliance screenings</p></div><button className="text-button">View all <span>→</span></button></div><div className="scan-list">{scans.map(scan => <ScanRow key={scan.name} scan={scan} />)}</div><div className="table-footer"><span>Showing 3 of 248 scans</span><button className="icon-button"><ChevronDown size={15} /></button></div></div><div className="right-column"><div className="card issues-card"><div className="card-header"><div><h2>Common issues</h2><p>Last 30 days</p></div><button className="icon-button"><MoreHorizontal size={18} /></button></div><div className="issue-chart"><div className="donut"><div><strong>62%</strong><span>Labeling</span></div></div><div className="legend"><Legend color="purple" label="Labeling" value="62%" /><Legend color="blue" label="Materials" value="24%" /><Legend color="yellow" label="Recycling" value="14%" /></div></div><div className="issue-footer"><span>Most frequent finding</span><strong>Missing recycling symbols</strong></div></div><div className="card upgrade-card"><div className="sparkle-circle"><Sparkles size={16} /></div><div><h3>Automate your reviews</h3><p>Unlock team workflows and custom reports.</p></div><button className="upgrade-button">Explore Pro <span>→</span></button></div></div></section>
-          <section className="tip-banner"><div className="tip-icon"><Sparkles size={17} /></div><div><strong>Quick tip</strong><p>Upload all sides of a package for the most accurate compliance score.</p></div><button className="icon-button" aria-label="Dismiss tip"><X size={16} /></button></section>
+          <p className="mt-6 text-sm sm:text-base text-slate-400 max-w-2xl leading-relaxed">
+            Turn product packaging artwork into an explainable preliminary compliance report in
+            seconds. Automatically detect mandatory declarations, cross-reference Legal Metrology
+            Rules, and inspect visual Heatmaps.
+          </p>
+
+          <div className="mt-8 flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+            <Link
+              href="/scan/new"
+              className="w-full sm:w-auto px-7 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-xl shadow-blue-600/30 flex items-center justify-center gap-2 transition"
+              style={{ textDecoration: 'none' }}
+            >
+              <ScanLine size={17} /> Scan Product Now
+            </Link>
+            <Link
+              href="/scan/demo"
+              className="w-full sm:w-auto px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-bold text-sm flex items-center justify-center gap-2 transition"
+              style={{ textDecoration: 'none' }}
+            >
+              <Layers size={17} /> View Live Heatmap Demo
+            </Link>
+          </div>
+
+          {/* Trust points */}
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-400">
+            <span className="flex items-center gap-1.5">
+              <CheckCircle2 size={15} className="text-emerald-400" /> Legal Metrology (PC) Rules 2011
+            </span>
+            <span className="flex items-center gap-1.5">
+              <CheckCircle2 size={15} className="text-emerald-400" /> Bounding Box Compliance Heatmap
+            </span>
+            <span className="flex items-center gap-1.5">
+              <CheckCircle2 size={15} className="text-emerald-400" /> Exportable Audit Reports
+            </span>
+          </div>
         </div>
-      </main>
-      {toast && <div className="toast"><ShieldCheck size={17} /> {toast}</div>}
-      <nav className="mobile-nav"><button className="mobile-nav-active"><LayoutDashboard size={18} /><span>Home</span></button><button onClick={startScan}><Plus size={20} /><span>New scan</span></button><button><History size={18} /><span>History</span></button><button><FileText size={18} /><span>Reports</span></button></nav>
+      </section>
+
+      {/* How It Works 4-Step Pipeline */}
+      <section id="how-it-works" className="py-20 bg-slate-900/40 border-b border-slate-900">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <h2 className="text-xs font-bold text-blue-400 uppercase tracking-wider">
+              Automated Screening Pipeline
+            </h2>
+            <h3 className="text-2xl sm:text-3xl font-black text-white mt-1">
+              From Raw Packaging to Verified Findings
+            </h3>
+            <p className="text-xs text-slate-400 mt-2">
+              PackSure AI integrates OCR, structured extraction, and regulatory intelligence.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 flex flex-col gap-3">
+              <div className="w-9 h-9 rounded-lg bg-blue-900/40 text-blue-400 flex items-center justify-center font-bold text-xs">
+                01
+              </div>
+              <h4 className="text-sm font-bold text-white">Upload Packaging</h4>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Upload one or multiple package sides (front, back, side, bottom) in high resolution.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 flex flex-col gap-3">
+              <div className="w-9 h-9 rounded-lg bg-purple-900/40 text-purple-400 flex items-center justify-center font-bold text-xs">
+                02
+              </div>
+              <h4 className="text-sm font-bold text-white">OCR &amp; Extraction</h4>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                PaddleOCR detects text elements and localized bounding box coordinates across panels.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 flex flex-col gap-3">
+              <div className="w-9 h-9 rounded-lg bg-emerald-900/40 text-emerald-400 flex items-center justify-center font-bold text-xs">
+                03
+              </div>
+              <h4 className="text-sm font-bold text-white">Regulatory RAG</h4>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Applies relevant Legal Metrology rules (MRP, Net Qty, Helpline, Batch, Address).
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 flex flex-col gap-3">
+              <div className="w-9 h-9 rounded-lg bg-amber-900/40 text-amber-400 flex items-center justify-center font-bold text-xs">
+                04
+              </div>
+              <h4 className="text-sm font-bold text-white">Heatmap &amp; Report</h4>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Highlights issues directly on the package mockup and generates an audit PDF report.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Feature Showcase */}
+      <section id="features" className="py-20 max-w-6xl mx-auto px-6">
+        <div className="text-center max-w-2xl mx-auto mb-14">
+          <h2 className="text-xs font-bold text-blue-400 uppercase tracking-wider">Core Capabilities</h2>
+          <h3 className="text-2xl sm:text-3xl font-black text-white mt-1">
+            Built for Modern Packaging Compliance Teams
+          </h3>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 flex flex-col gap-3">
+            <Layers className="text-blue-400" size={24} />
+            <h4 className="text-base font-bold text-white">Compliance Heatmap</h4>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              No guesswork. Interactive bounding box overlays show exactly where mandatory
+              declarations pass (🟢), need review (🟡), or are missing (🔴).
+            </p>
+          </div>
+
+          <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 flex flex-col gap-3">
+            <BookOpen className="text-emerald-400" size={24} />
+            <h4 className="text-base font-bold text-white">Verified Regulatory RAG</h4>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Grounds evaluations directly in the Legal Metrology (Packaged Commodities) Rules 2011,
+              citing exact Rule numbers and requirements.
+            </p>
+          </div>
+
+          <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 flex flex-col gap-3">
+            <FileCheck2 className="text-purple-400" size={24} />
+            <h4 className="text-base font-bold text-white">Explainable Audit Reports</h4>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Generates executive summary PDF reports complete with confidence scores, OCR
+              transcriptions, and actionable pre-press guidance.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Responsible AI Disclaimer Banner */}
+      <section className="max-w-4xl mx-auto px-6 pb-20">
+        <div className="p-6 rounded-2xl bg-blue-950/40 border border-blue-900 flex items-start gap-4 text-xs text-slate-300">
+          <ShieldAlert className="text-blue-400 shrink-0 mt-0.5" size={20} />
+          <div>
+            <strong className="text-white block mb-1">
+              Responsible AI Statement — Preliminary Screening Scope
+            </strong>
+            PackSure AI provides preliminary automated screening assistance for manufacturers,
+            packagers, and retailers. It is designed to catch oversights before costly print runs. It
+            does not constitute a legally binding statutory certificate or legal warranty.
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="mt-auto border-t border-slate-900 py-8 text-center text-xs text-slate-500">
+        <p>© 2026 PackSure AI • Scan. Verify. Comply.</p>
+      </footer>
     </div>
   )
 }
-
-function KpiCard({ label, value, delta, note, icon: Icon, tone, negative = false }: { label: string; value: string; delta: string; note: string; icon: typeof Box; tone: string; negative?: boolean }) {
-  return <div className="kpi-card"><div className={`kpi-icon ${tone}`}><Icon size={18} /></div><div className="kpi-label">{label}<span className={`trend ${negative ? 'negative' : ''}`}>{negative ? '↓' : '↑'} {delta}</span></div><div className="kpi-value">{value}</div><div className="kpi-note">{note}</div></div>
-}
-function ScanRow({ scan }: { scan: typeof scans[number] }) {
-  return <div className="scan-row"><div className={`scan-thumb ${scan.color}`}>{scan.image}</div><div className="scan-name"><strong>{scan.name}</strong><span>{scan.type}</span></div><div className="scan-date">{scan.date}</div><div className="scan-score"><strong>{scan.score}</strong><span>/ 100</span></div><span className={`status ${scan.color}`}>{scan.color === 'green' ? '●' : scan.color === 'amber' ? '●' : '●'} {scan.status}</span><button className="icon-button"><MoreHorizontal size={17} /></button></div>
-}
-function Legend({ color, label, value }: { color: string; label: string; value: string }) { return <div className="legend-row"><i className={color} /> <span>{label}</span><strong>{value}</strong></div> }

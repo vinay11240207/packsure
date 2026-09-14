@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" width="400" height="600">
+  <defs>
+    <linearGradient id="pouchGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="40%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+
+  <!-- Pouch Body -->
+  <rect x="15" y="15" width="370" height="570" rx="24" fill="url(#pouchGrad)" stroke="#334155" stroke-width="2"/>
+  
+  <!-- Seal lines top & bottom -->
+  <line x1="25" y1="35" x2="375" y2="35" stroke="#475569" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <line x1="25" y1="565" x2="375" y2="565" stroke="#475569" stroke-width="1.5" stroke-dasharray="3 3"/>
+
+  <!-- Brand Banner -->
+  <rect x="35" y="55" width="330" height="75" rx="14" fill="#0f172a" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="200" y="92" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="24" text-anchor="middle" letter-spacing="3">TERRA SNACKS</text>
+  <text x="200" y="114" fill="#94a3b8" font-family="system-ui, -apple-system, sans-serif" font-weight="600" font-size="11" text-anchor="middle" letter-spacing="1">ORIGINAL CRUNCHY TORTILLA CRISPS</text>
+
+  <!-- Product Illustration Graphic -->
+  <circle cx="200" cy="200" r="55" fill="url(#accentGrad)" opacity="0.15"/>
+  <polygon points="200,160 245,230 155,230" fill="url(#accentGrad)" filter="url(#shadow)"/>
+  <circle cx="200" cy="205" r="8" fill="#fef08a"/>
+  
+  <!-- Badge -->
+  <rect x="140" y="245" width="120" height="22" rx="11" fill="#22c55e" opacity="0.9"/>
+  <text x="200" y="260" fill="#ffffff" font-family="system-ui, sans-serif" font-weight="700" font-size="10" text-anchor="middle">100% VEGETARIAN</text>
+
+  <!-- Mandatory Declarations Box -->
+  <rect x="25" y="300" width="350" height="250" rx="10" fill="#ffffff" fill-opacity="0.04" stroke="#475569" stroke-width="1"/>
+  <text x="40" y="320" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="9" font-weight="700" letter-spacing="1">MANDATORY DECLARATIONS</text>
+
+  <!-- BBox: Country of origin [30, 333, 235, 358] -->
+  <text x="35" y="348" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="12">Country of Origin: <tspan font-weight="700" fill="#38bdf8">India</tspan></text>
+
+  <!-- BBox: Best before [30, 363, 360, 390] -->
+  <text x="35" y="380" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="11">Best Before: <tspan font-weight="600" fill="#fbbf24">6 months from packaging</tspan></text>
+
+  <!-- BBox: MRP [240, 326, 393, 380] -->
+  <rect x="245" y="330" width="120" height="45" rx="6" fill="#1e293b" stroke="#64748b" stroke-width="1"/>
+  <text x="255" y="348" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="9">MAX RETAIL PRICE</text>
+  <text x="255" y="366" fill="#4ade80" font-family="system-ui, sans-serif" font-size="15" font-weight="800">₹ 40.00</text>
+
+  <!-- BBox: Net Qty [242, 386, 315, 410] -->
+  <text x="245" y="402" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="12">Net Qty: <tspan font-weight="700" fill="#ffffff">52 g</tspan></text>
+
+  <!-- BBox: Manufacturer [30, 449, 360, 492] -->
+  <text x="35" y="440" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="9" font-weight="700">MANUFACTURED &amp; MARKETED BY:</text>
+  <text x="35" y="462" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="11" font-weight="600">ABC Foods India Pvt. Ltd.</text>
+  <text x="35" y="480" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="10">Plot 14, MIDC Industrial Area, Andheri (E), Mumbai 400072</text>
+
+  <!-- Notice: Consumer Helpline is missing from label! -->
+  <rect x="35" y="505" width="330" height="32" rx="6" fill="#ef4444" fill-opacity="0.1" stroke="#ef4444" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="200" y="525" fill="#f87171" font-family="system-ui, sans-serif" font-size="9" text-anchor="middle">[ Consumer Care helpline declaration not printed here ]</text>
+</svg>
