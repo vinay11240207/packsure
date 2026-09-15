@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import { getScanById } from '@/lib/mock-data'
+import { fetchScan } from '@/lib/api'
 import { Scan } from '@/lib/types'
 import ComplianceHeatmap from '@/components/scan/ComplianceHeatmap'
 import FindingsList from '@/components/scan/FindingsList'
@@ -22,12 +22,31 @@ export default function ScanResultsPage() {
   const params = useParams()
   const id = typeof params?.id === 'string' ? params.id : 'demo'
 
-  const [scan, setScan] = useState<Scan>(getScanById(id))
+  const [scan, setScan] = useState<Scan | null>(null)
   const [selectedFindingId, setSelectedFindingId] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    setScan(getScanById(id))
+    let isMounted = true
+    setLoading(true)
+
+      fetchScan(id)
+      .then((data) => {
+        if (isMounted) setScan(data)
+      })
+      .catch(() => undefined)
+      .finally(() => {
+        if (isMounted) setLoading(false)
+      })
+
+    return () => {
+      isMounted = false
+    }
   }, [id])
+
+  if (loading || !scan) {
+    return <div className="max-w-7xl mx-auto text-sm text-slate-500">Loading scan results...</div>
+  }
 
   const passedCount = scan.complianceResults.filter((r) => r.status === 'PASS').length
   const reviewCount = scan.complianceResults.filter((r) => r.status === 'NEEDS_REVIEW').length

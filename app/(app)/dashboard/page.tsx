@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+
 import Link from 'next/link'
 import {
   Activity,
@@ -11,9 +13,23 @@ import {
   ShieldCheck,
   Sparkles,
 } from 'lucide-react'
-import { SCAN_HISTORY } from '@/lib/mock-data'
+import { fetchAnalytics, fetchHistory } from '@/lib/api'
+import { ScanSummary } from '@/lib/types'
 
 export default function DashboardPage() {
+  const [history, setHistory] = useState<ScanSummary[]>([])
+  const [analytics, setAnalytics] = useState({ totalScans: 0, passRate: 0, issueRate: 0 })
+
+  useEffect(() => {
+    Promise.all([fetchHistory(), fetchAnalytics()]).then(([scans, metrics]) => {
+      setHistory(scans)
+      setAnalytics(metrics)
+    }).catch(() => undefined)
+  }, [])
+
+  const passed = history.filter((scan) => scan.status === 'PASS').length
+  const review = history.filter((scan) => scan.status === 'NEEDS_REVIEW').length
+  const issues = history.filter((scan) => scan.status === 'POTENTIAL_ISSUE').length
   return (
     <>
       <section className="welcome-row">
@@ -34,7 +50,7 @@ export default function DashboardPage() {
       <section className="kpi-grid" aria-label="Compliance overview">
         <KpiCard
           label="Products scanned"
-          value="248"
+          value={String(analytics.totalScans)}
           delta="18.4%"
           note="vs. last month"
           icon={Box}
@@ -42,7 +58,7 @@ export default function DashboardPage() {
         />
         <KpiCard
           label="Passed"
-          value="186"
+          value={String(passed)}
           delta="12.8%"
           note="vs. last month"
           icon={ShieldCheck}
@@ -50,7 +66,7 @@ export default function DashboardPage() {
         />
         <KpiCard
           label="Needs review"
-          value="42"
+          value={String(review)}
           delta="6.2%"
           note="vs. last month"
           icon={Activity}
@@ -58,7 +74,7 @@ export default function DashboardPage() {
         />
         <KpiCard
           label="Potential issues"
-          value="20"
+          value={String(issues)}
           delta="2.1%"
           note="vs. last month"
           icon={Bell}
@@ -79,7 +95,7 @@ export default function DashboardPage() {
             </Link>
           </div>
           <div className="scan-list">
-            {SCAN_HISTORY.slice(0, 4).map((scan) => (
+            {history.slice(0, 4).map((scan) => (
               <Link
                 key={scan.id}
                 href={`/scan/${scan.id}`}
@@ -125,7 +141,7 @@ export default function DashboardPage() {
             ))}
           </div>
           <div className="table-footer">
-            <span>Showing 4 of 248 scans</span>
+            <span>Showing {Math.min(history.length, 4)} of {analytics.totalScans} scans</span>
             <Link href="/history" className="text-blue-600 font-bold text-xs" style={{ textDecoration: 'none' }}>
               Open full history →
             </Link>

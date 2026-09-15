@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { Camera, Image as ImageIcon, Trash2, Upload, AlertCircle } from 'lucide-react'
+import { Camera, Image as ImageIcon, Trash2, Upload, AlertCircle, FileText } from 'lucide-react'
 
 interface UploadZoneProps {
   onStartAnalysis: (files: File[]) => void
@@ -30,12 +30,15 @@ export default function UploadZone({ onStartAnalysis }: UploadZoneProps) {
   const cameraInputRef = useRef<HTMLInputElement>(null)
 
   const handleFile = (file: File) => {
-    if (!['image/jpeg', 'image/png', 'image/webp', 'image/jpg'].includes(file.type)) {
-      setError('Please upload a valid image (JPG, PNG, or WebP).')
+    const isImage = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'].includes(file.type)
+    const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')
+
+    if (!isImage && !isPdf) {
+      setError('Please upload a valid packaging image (JPG, PNG, WebP) or PDF artwork.')
       return
     }
-    if (file.size > 10 * 1024 * 1024) {
-      setError('Image exceeds 10MB limit.')
+    if (file.size > 15 * 1024 * 1024) {
+      setError('File exceeds 15MB limit.')
       return
     }
     setError(null)
@@ -112,7 +115,7 @@ export default function UploadZone({ onStartAnalysis }: UploadZoneProps) {
         <input
           ref={fileInputRef}
           type="file"
-          accept="image/jpeg,image/png,image/webp"
+          accept="image/jpeg,image/png,image/webp,application/pdf,.pdf"
           className="hidden"
           onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
         />
@@ -127,12 +130,26 @@ export default function UploadZone({ onStartAnalysis }: UploadZoneProps) {
 
         {previews[activeSide] ? (
           <div className="flex flex-col items-center gap-4 w-full">
-            <div className="relative rounded-lg overflow-hidden border border-slate-200 max-h-72 w-full max-w-sm bg-slate-900 shadow">
-              <img
-                src={previews[activeSide]!}
-                alt={`${activeSide} preview`}
-                className="w-full h-full object-contain max-h-72"
-              />
+            <div className="relative rounded-lg overflow-hidden border border-slate-200 max-h-72 w-full max-w-sm bg-slate-900 shadow flex items-center justify-center p-4">
+              {filesBySide[activeSide]?.name?.toLowerCase().endsWith('.pdf') ? (
+                <div className="flex flex-col items-center justify-center py-10 text-white gap-2">
+                  <div className="w-16 h-16 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center border border-rose-500/40">
+                    <FileText size={32} />
+                  </div>
+                  <span className="text-xs font-bold text-slate-200 mt-1 max-w-[240px] truncate">
+                    {filesBySide[activeSide]?.name}
+                  </span>
+                  <span className="text-[10px] text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/30">
+                    PDF Artwork Ready
+                  </span>
+                </div>
+              ) : (
+                <img
+                  src={previews[activeSide]!}
+                  alt={`${activeSide} preview`}
+                  className="w-full h-full object-contain max-h-72"
+                />
+              )}
               <button
                 type="button"
                 onClick={(e) => {
@@ -140,7 +157,7 @@ export default function UploadZone({ onStartAnalysis }: UploadZoneProps) {
                   removeFile(activeSide)
                 }}
                 className="absolute top-2 right-2 p-1.5 rounded-md bg-rose-600 text-white hover:bg-rose-700 shadow"
-                title="Remove image"
+                title="Remove file"
               >
                 <Trash2 size={14} />
               </button>
@@ -156,10 +173,10 @@ export default function UploadZone({ onStartAnalysis }: UploadZoneProps) {
             </div>
             <div>
               <h4 className="text-sm font-bold text-slate-800">
-                Drop your <span className="text-blue-600">{activeSide}</span> package image here
+                Drop your <span className="text-blue-600">{activeSide}</span> package image or PDF here
               </h4>
               <p className="text-xs text-slate-500 mt-1">
-                Supports JPG, PNG, WebP up to 10MB
+                Supports JPG, PNG, WebP, and PDF artwork up to 15MB
               </p>
             </div>
 

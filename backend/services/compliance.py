@@ -1,6 +1,5 @@
 from typing import List, Tuple, Dict, Any
 from models.schemas import ComplianceResult, OcrResult
-from services.mock_data import get_mock_scan
 
 # Legal Metrology (Packaged Commodities) Rules, 2011 mandatory declaration definitions
 LEGAL_METROLOGY_RULES = {
@@ -41,9 +40,22 @@ def evaluate_compliance(extracted_data: Dict[str, Any], ocr_results: List[OcrRes
     Evaluates extracted packaging declarations deterministically.
     Returns evaluated compliance results and overall 0-100 score.
     """
-    # Uses mock demonstration dataset
-    demo = get_mock_scan("demo")
-    return demo.complianceResults, demo.score
+    results = []
+    for requirement_id, rule in LEGAL_METROLOGY_RULES.items():
+        value = extracted_data.get(requirement_id)
+        detected = str(value) if value else None
+        results.append(ComplianceResult(
+            requirementId=requirement_id,
+            label=rule["label"],
+            status="PASS" if detected else "POTENTIAL_ISSUE",
+            confidence=0.9 if detected else 0.2,
+            detected=detected,
+            reason="Declaration detected in analyzed package data." if detected else "Mandatory declaration was not detected.",
+            evidence=next((item.text for item in ocr_results if requirement_id.replace("_", " ") in item.text.lower()), None),
+            source=rule["source"],
+            sourceSection=rule["section"],
+        ))
+    return results, calculate_score(results)
 
 def calculate_score(results: List[ComplianceResult]) -> int:
     if not results:

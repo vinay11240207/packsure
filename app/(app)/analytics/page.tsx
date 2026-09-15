@@ -1,6 +1,7 @@
 'use client'
 
-import { ANALYTICS_DATA } from '@/lib/mock-data'
+import { useEffect, useState } from 'react'
+import { fetchAnalytics } from '@/lib/api'
 import {
   Activity,
   AlertTriangle,
@@ -13,8 +14,18 @@ import {
 } from 'lucide-react'
 
 export default function AnalyticsPage() {
+  const [analytics, setAnalytics] = useState<Awaited<ReturnType<typeof fetchAnalytics>> | null>(null)
+
+  useEffect(() => {
+    fetchAnalytics().then(setAnalytics).catch(() => setAnalytics(null))
+  }, [])
+
+  if (!analytics) {
+    return <div className="max-w-6xl mx-auto text-sm text-slate-500">Loading analytics...</div>
+  }
+
   const { totalScans, passRate, avgScore, issueRate, scansOverTime, commonIssues, categoryBreakdown } =
-    ANALYTICS_DATA
+    analytics
 
   return (
     <div className="max-w-6xl mx-auto flex flex-col gap-6">

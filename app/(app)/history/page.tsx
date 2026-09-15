@@ -1,16 +1,22 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { SCAN_HISTORY } from '@/lib/mock-data'
+import { fetchHistory } from '@/lib/api'
+import { ScanSummary } from '@/lib/types'
 import { ScanStatus } from '@/lib/types'
 import { ChevronRight, Filter, Plus, Search } from 'lucide-react'
 
 export default function HistoryPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState<'ALL' | ScanStatus>('ALL')
+  const [history, setHistory] = useState<ScanSummary[]>([])
 
-  const filtered = SCAN_HISTORY.filter((item) => {
+  useEffect(() => {
+    fetchHistory().then(setHistory).catch(() => setHistory([]))
+  }, [])
+
+  const filtered = history.filter((item) => {
     const matchesSearch =
       item.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.category.toLowerCase().includes(searchTerm.toLowerCase())

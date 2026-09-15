@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import UploadZone from '@/components/scan/UploadZone'
 import AnalysisProgress from '@/components/scan/AnalysisProgress'
+import { submitScan } from '@/lib/api'
 import { Check, Edit3, ShieldAlert, Sparkles } from 'lucide-react'
 
 export default function NewScanPage() {
@@ -11,9 +12,25 @@ export default function NewScanPage() {
   const [phase, setPhase] = useState<'upload' | 'analyzing' | 'category_confirm'>('upload')
   const [detectedCategory, setDetectedCategory] = useState('Packaged Food')
   const [isEditingCategory, setIsEditingCategory] = useState(false)
+  const [scanId, setScanId] = useState<string | null>(null)
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
-  const handleStartAnalysis = (_files: File[]) => {
+  const handleStartAnalysis = async (files: File[]) => {
+    if (files.length === 0) {
+      setErrorMsg('Upload at least one package image or PDF to start screening.')
+      return
+    }
+
     setPhase('analyzing')
+    setErrorMsg(null)
+
+    try {
+      const data = await submitScan(files)
+      setScanId(data.id)
+    } catch (err) {
+      setPhase('upload')
+      setErrorMsg(err instanceof Error ? err.message : 'Screening failed. Please try again.')
+    }
   }
 
   const handleAnalysisComplete = () => {
@@ -21,7 +38,7 @@ export default function NewScanPage() {
   }
 
   const handleProceedToResults = () => {
-    router.push('/scan/demo')
+    if (scanId) router.push(`/scan/${scanId}`)
   }
 
   return (
@@ -35,6 +52,12 @@ export default function NewScanPage() {
           Upload crisp images of your package sides to evaluate against Legal Metrology Rules.
         </p>
       </div>
+
+      {errorMsg && (
+        <div className="mb-4 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-xs text-rose-700">
+          {errorMsg}
+        </div>
+      )}
 
       {phase === 'upload' && (
         <UploadZone onStartAnalysis={handleStartAnalysis} />

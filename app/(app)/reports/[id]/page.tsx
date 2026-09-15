@@ -1,14 +1,24 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import { getScanById } from '@/lib/mock-data'
+import { fetchScan } from '@/lib/api'
+import { Scan } from '@/lib/types'
 import { ArrowLeft, Download, Printer, ShieldCheck } from 'lucide-react'
 
 export default function ReportPage() {
   const params = useParams()
   const id = typeof params?.id === 'string' ? params.id : 'demo'
-  const scan = getScanById(id)
+  const [scan, setScan] = useState<Scan | null>(null)
+
+  useEffect(() => {
+    fetchScan(id).then(setScan).catch(() => setScan(null))
+  }, [id])
+
+  if (!scan) {
+    return <div className="max-w-4xl mx-auto text-sm text-slate-500">Loading report...</div>
+  }
 
   const passedCount = scan.complianceResults.filter((r) => r.status === 'PASS').length
   const reviewCount = scan.complianceResults.filter((r) => r.status === 'NEEDS_REVIEW').length

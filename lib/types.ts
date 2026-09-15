@@ -1,6 +1,16 @@
 export type ScanStatus = 'PASS' | 'NEEDS_REVIEW' | 'POTENTIAL_ISSUE'
 export type ProductCategory = 'Packaged Food' | 'Cosmetic' | 'Household' | 'Personal Care' | 'Beverage' | 'Other'
 
+export interface AnalyticsData {
+  totalScans: number
+  passRate: number
+  avgScore: number
+  issueRate: number
+  scansOverTime: { month: string; scans: number; passed: number; issues: number }[]
+  commonIssues: { label: string; percentage: number; count: number }[]
+  categoryBreakdown: { category: string; percentage: number }[]
+}
+
 export interface OcrResult {
   text: string
   confidence: number
